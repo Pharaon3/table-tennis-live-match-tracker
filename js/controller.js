@@ -102,18 +102,18 @@ function countdown() {
         if(cs['type'] == 'periodscore' || cs['type'] == 'starts_serve_period'){
           if(cs['team'] == 'home'){
             if(viewMode == 3){
-              bounceBall(30, 340)
+              bounceBall(60, 340)
             }
             if(viewMode == 2){
-              bounceBall(30, 370)
+              bounceBall(100, 380)
             }
           }
           if(cs['team'] == 'away'){
             if(viewMode == 3){
-              bounceBall(700, 240)
+              bounceBall(680, 190)
             }
             if(viewMode == 2){
-              bounceBall(770, 150)
+              bounceBall(700, 205)
             }
           }
         }
@@ -704,7 +704,7 @@ function setState(homeState, awayState, side) {
   } else {
     document
       .getElementById("homeStateG")
-      .setAttribute("transform", "translate(120, 270)");
+      .setAttribute("transform", "translate(120, 280)");
     document
       .getElementById("awayStateG")
       .setAttribute("transform", "translate(700, 300)");
@@ -737,17 +737,17 @@ function setSets() {
 function toggleViewMode(){
   if(viewMode == 2){
     viewMode = 3;
-    $("#pitchImage").attr("href", './media/pitch3d.png')
+    $("#pitchImage").attr("href", './media/table3d.png')
     $("#viewMode").text("2D")
     $("#homeStateG").attr("transform", "translate(50, 380)")
-    $("#awayStateG").attr("transform", "translate(670, 220)")
+    $("#awayStateG").attr("transform", "translate(720, 150)")
   } 
   else{
     viewMode = 2;
-    $("#pitchImage").attr("href", './media/pitch2d.png')
+    $("#pitchImage").attr("href", './media/table2d.png')
     $("#viewMode").text("3D")
-    $("#homeStateG").attr("transform", "translate(20, 400)")
-    $("#awayStateG").attr("transform", "translate(780, 110)")
+    $("#homeStateG").attr("transform", "translate(70, 410)")
+    $("#awayStateG").attr("transform", "translate(720, 170)")
   }
 }
 
@@ -923,7 +923,7 @@ function handleEventData(data) {
     }
     if (match["status"]["name"] == "Break") {
       //Break time
-      setCenterFrame("Break", homeScore + " : " + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
@@ -976,25 +976,25 @@ function handleEventData(data) {
     }
     if (match["p"] == 31) {
       setTimer = false;
-      setCenterFrame("Break", homeScore + ":" + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 32) {
       setTimer = false;
-      setCenterFrame("Halftime", homeScore + ":" + awayScore);
+      setCenterFrame("Halftime", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 33) {
       setTimer = false;
-      setCenterFrame("Break", homeScore + ":" + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 34) {
       setTimer = false;
-      setCenterFrame("Break", homeScore + ":" + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
@@ -1110,25 +1110,25 @@ function setP(){
   }
   if (match["p"] == 31) {
     setTimer = false;
-    setCenterFrame("Break", homeScore + ":" + awayScore);
+    setCenterFrame("Break", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
   if (match["p"] == 32) {
     setTimer = false;
-    setCenterFrame("Halftime", homeScore + ":" + awayScore);
+    setCenterFrame("Halftime", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
   if (match["p"] == 33) {
     setTimer = false;
-    setCenterFrame("Break", homeScore + ":" + awayScore);
+    setCenterFrame("Break", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
   if (match["p"] == 34) {
     setTimer = false;
-    setCenterFrame("Break", homeScore + ":" + awayScore);
+    setCenterFrame("Break", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
@@ -1331,25 +1331,25 @@ function setP(){
     }
     if (match["p"] == 31) {
       setTimer = false;
-      setCenterFrame("Break", homeScore + ":" + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 32) {
       setTimer = false;
-      setCenterFrame("Halftime", homeScore + ":" + awayScore);
+      setCenterFrame("Halftime", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 33) {
       setTimer = false;
-      setCenterFrame("Break", homeScore + ":" + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 34) {
       setTimer = false;
-      setCenterFrame("Break", homeScore + ":" + awayScore);
+      setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
