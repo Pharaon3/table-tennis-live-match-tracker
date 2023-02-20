@@ -299,16 +299,33 @@
                 style="stroke: rgb(205, 205, 255); stroke-width: 2"
                 stroke-opacity="1"
               />
-              <text
-                id="homeState"
-                fill="#fff"
-                font-size="14"
-                font-family="InriaSans"
-                x="5"
-                y="-3"
-                fill-opacity="0.9"
-                text-anchor="start"
-              ></text>
+              <g id="homePoint" style="display: none;">
+                <rect
+                  x="0"
+                  y="-35"
+                  rx="4"
+                  ry="4"
+                  width="65"
+                  height="20"
+                  style="
+                    fill: white;
+                    stroke: white;
+                    stroke-width: 0;
+                    stroke-opacity: 1;
+                  "
+                  fill-opacity="0.4"
+                />
+                <text
+                  id="homeState"
+                  fill="#fff"
+                  font-size="20"
+                  font-family="InriaSans"
+                  x="5"
+                  y="-18"
+                  fill-opacity="0.9"
+                  text-anchor="start"
+                >POINT</text>
+              </g>
               <text
                 id="homeStateN"
                 fill="#a1e36f"
@@ -332,7 +349,7 @@
             </g>
             <g
               id="awayStateG"
-              transform="translate(720, 150)"
+              transform="translate(690, 150)"
               style="display: none"
             >
               <line
@@ -344,16 +361,32 @@
                 style="stroke: rgb(205, 205, 255); stroke-width: 2"
                 stroke-opacity="1"
               />
-              <text
-                id="awayState"
-                fill="#fff"
-                font-size="20"
-                font-family="InriaSans"
-                x="-5"
-                y="-3"
-                fill-opacity="0.9"
-                text-anchor="end"
-              ></text>
+              <g id="awayPoint" style="display: none;">
+                <rect
+                  x="-65"
+                  y="-35"
+                  rx="4"
+                  ry="4"
+                  width="65"
+                  height="20"
+                  style="
+                    fill: white;
+                    stroke: white;
+                    stroke-width: 0;
+                    stroke-opacity: 1;
+                  "
+                  fill-opacity="0.4"
+                />
+                <text
+                  fill="#fff"
+                  font-size="20"
+                  font-family="InriaSans"
+                  x="-5"
+                  y="-18"
+                  fill-opacity="0.9"
+                  text-anchor="end"
+                >POINT</text>
+              </g>
               <text
                 id="awayStateN"
                 fill="#a1e36f"
@@ -597,7 +630,7 @@
               fill-opacity="1"
               text-anchor="middle"
             >
-              0 - 0
+              
             </text>
             <text
               id="score"
@@ -609,7 +642,7 @@
               fill-opacity="1"
               text-anchor="middle"
             >
-              0-0
+              
             </text>
             <text
               id="period"
@@ -620,9 +653,7 @@
               y="33"
               fill-opacity="1"
               text-anchor="middle"
-            >
-              1st Set
-            </text>
+            ></text>
             <rect
               id="center_rect"
               x="255"
@@ -701,7 +732,7 @@
                   fill-opacity="0.71"
                   text-anchor="middle"
                 >
-                  1st Set
+                  Game 1
                 </text>
                 <text
                   id="tableName2"
@@ -713,7 +744,7 @@
                   fill-opacity="0.71"
                   text-anchor="middle"
                 >
-                  2nd Set
+                  Game 2
                 </text>
                 <text
                   id="tableName3"
@@ -725,7 +756,7 @@
                   fill-opacity="0.71"
                   text-anchor="middle"
                 >
-                  3rd Set
+                  Game 3
                 </text>
                 <text
                   id="tableName4"
@@ -737,7 +768,7 @@
                   fill-opacity="0.71"
                   text-anchor="middle"
                 >
-                  4th Set
+                  Game 4
                 </text>
                 <text
                   id="tableName5"
@@ -749,7 +780,7 @@
                   fill-opacity="0.71"
                   text-anchor="middle"
                 >
-                  5th Set
+                  Game 5
                 </text>
                 <g id="scoreTableJerseyHome" transform="translate(355, 343)">
                   <g

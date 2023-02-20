@@ -1,7 +1,8 @@
 var socket;
 var viewMode = 3;
 var currentState = 0;
-var gameCount = 1;
+var gameCount = 0;
+var currentPeriod
 
 var isLimitedCov = false,
   isperiodscore = false;
@@ -100,7 +101,7 @@ function countdown() {
         t += 1 / 101;
         let cs = gameState[currentState];
         if(cs['type'] == 'periodscore' || cs['type'] == 'starts_serve_period'){
-          if(cs['team'] == 'home'){
+          if(whoserve() == 0){
             if(viewMode == 3){
               bounceBall(60, 340)
             }
@@ -108,7 +109,7 @@ function countdown() {
               bounceBall(100, 380)
             }
           }
-          if(cs['team'] == 'away'){
+          if(whoserve() == 1){
             if(viewMode == 3){
               bounceBall(680, 190)
             }
@@ -740,13 +741,13 @@ function toggleViewMode(){
     $("#pitchImage").attr("href", './media/table3d.png')
     $("#viewMode").text("2D")
     $("#homeStateG").attr("transform", "translate(50, 380)")
-    $("#awayStateG").attr("transform", "translate(720, 150)")
+    $("#awayStateG").attr("transform", "translate(690, 150)")
   } 
   else{
     viewMode = 2;
     $("#pitchImage").attr("href", './media/table2d.png')
     $("#viewMode").text("3D")
-    $("#homeStateG").attr("transform", "translate(70, 410)")
+    $("#homeStateG").attr("transform", "translate(80, 410)")
     $("#awayStateG").attr("transform", "translate(720, 170)")
   }
 }
@@ -818,9 +819,7 @@ function handleEventData(data) {
     }
     document.getElementById("homeTeamName").textContent = teamNames["home"];
     document.getElementById("awayTeamName").textContent = teamNames["away"];
-    document.getElementById("period").textContent = capitalizeWords(
-      match["status"]["name"].split(" ")
-    ).join(" ");
+    document.getElementById("period").textContent = "Game " + match["p"]
     // Score Setting
     var result = match["result"];
     if (result["home"]) homeScore = result["home"];
@@ -828,70 +827,73 @@ function handleEventData(data) {
     document.getElementById("setScore").textContent =
       homeScore + " - " + awayScore;
     // Period Score Setting
-    let currentPeriod = 1;
+    currentPeriod = 0;
     if (match["periods"] != null) {
       if (match["periods"]["p1"]) {
+        currentPeriod = 1;
         document.getElementById("homeScore1").textContent =
           match["periods"]["p1"]["home"];
         document.getElementById("awayScore1").textContent =
           match["periods"]["p1"]["away"];
         gameCount =
-          match["periods"]["p1"]["home"] + match["periods"]["p1"]["away"] + 1;
-        currentPeriod = 2;
+          match["periods"]["p1"]["home"] + match["periods"]["p1"]["away"];
         $("#score").text(match["periods"]["p1"]["home"] + '-' + match["periods"]["p1"]["away"])
       } else {
         document.getElementById("homeScore1").textContent = "-";
         document.getElementById("awayScore1").textContent = "-";
       }
       if (match["periods"]["p2"]) {
+        currentPeriod = 2;
         document.getElementById("homeScore2").textContent =
           match["periods"]["p2"]["home"];
         document.getElementById("awayScore2").textContent =
           match["periods"]["p2"]["away"];
         gameCount =
-          match["periods"]["p2"]["home"] + match["periods"]["p2"]["away"] + 1;
+          match["periods"]["p2"]["home"] + match["periods"]["p2"]["away"];
         $("#score").text(match["periods"]["p2"]["home"] + '-' + match["periods"]["p2"]["away"])
       } else {
         document.getElementById("homeScore2").textContent = "-";
         document.getElementById("awayScore2").textContent = "-";
       }
       if (match["periods"]["p3"]) {
+        currentPeriod = 3;
         document.getElementById("homeScore3").textContent =
           match["periods"]["p3"]["home"];
         document.getElementById("awayScore3").textContent =
           match["periods"]["p3"]["away"];
         gameCount =
-          match["periods"]["p3"]["home"] + match["periods"]["p3"]["away"] + 1;
+          match["periods"]["p3"]["home"] + match["periods"]["p3"]["away"];
         $("#score").text(match["periods"]["p3"]["home"] + '-' + match["periods"]["p3"]["away"])
       } else {
         document.getElementById("homeScore3").textContent = "-";
         document.getElementById("awayScore3").textContent = "-";
       }
       if (match["periods"]["p4"]) {
+        currentPeriod = 4;
         document.getElementById("homeScore4").textContent =
           match["periods"]["p4"]["home"];
         document.getElementById("awayScore4").textContent =
           match["periods"]["p4"]["away"];
         gameCount =
-          match["periods"]["p4"]["home"] + match["periods"]["p4"]["away"] + 1;
+          match["periods"]["p4"]["home"] + match["periods"]["p4"]["away"];
         $("#score").text(match["periods"]["p4"]["home"] + '-' + match["periods"]["p4"]["away"])
       } else {
         document.getElementById("homeScore4").textContent = "-";
         document.getElementById("awayScore4").textContent = "-";
       }
       if (match["periods"]["p5"]) {
+        currentPeriod = 5;
         document.getElementById("homeScore5").textContent =
           match["periods"]["p5"]["home"];
         document.getElementById("awayScore5").textContent =
           match["periods"]["p5"]["away"];
         gameCount =
-          match["periods"]["p5"]["home"] + match["periods"]["p5"]["away"] + 1;
+          match["periods"]["p5"]["home"] + match["periods"]["p5"]["away"];
         $("#score").text(match["periods"]["p5"]["home"] + '-' + match["periods"]["p5"]["away"])
       } else {
         document.getElementById("homeScore5").textContent = "-";
         document.getElementById("awayScore5").textContent = "-";
       }
-      // document.getElementById("gameCount").textContent = "Game " + gameCount;
     } else {
       document.getElementById("homeScore1").textContent = "-";
       document.getElementById("awayScore1").textContent = "-";
@@ -909,14 +911,15 @@ function handleEventData(data) {
       document.getElementById("homeScore3").style.display = "block";
       document.getElementById("awayScore3").style.display = "block";
 
-      document.getElementById("tableName1").textContent = "1st Set";
-      document.getElementById("tableName2").textContent = "2nd Set";
-      document.getElementById("tableName3").textContent = "3rd Set";
+      document.getElementById("tableName1").textContent = "Game 1";
+      document.getElementById("tableName2").textContent = "Game 2";
+      document.getElementById("tableName3").textContent = "Game 3";
       document.getElementById("tableName3").style.display = "block";
     }
 
     if (match["status"]["name"] == "Ended") {
       //Match End
+      $("#period").text("Ended")
       setCenterFrame("Match End", homeScore + " : " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
@@ -929,6 +932,7 @@ function handleEventData(data) {
     }
 
     if (match["status"]["name"] == "Not started") {
+      $("#period").text("Not Started")
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
       const currentDate = new Date();
@@ -976,24 +980,28 @@ function handleEventData(data) {
     }
     if (match["p"] == 31) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 32) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Halftime", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 33) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 34) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
@@ -1110,24 +1118,28 @@ function setP(){
   }
   if (match["p"] == 31) {
     setTimer = false;
+      $("#period").text("Break");
     setCenterFrame("Break", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
   if (match["p"] == 32) {
     setTimer = false;
+      $("#period").text("Break");
     setCenterFrame("Halftime", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
   if (match["p"] == 33) {
     setTimer = false;
+      $("#period").text("Break");
     setCenterFrame("Break", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
   }
   if (match["p"] == 34) {
     setTimer = false;
+      $("#period").text("Break");
     setCenterFrame("Break", homeScore + " - " + awayScore);
     $("#homeStateG").css('display', 'none');
     $("#awayStateG").css('display', 'none');
@@ -1173,9 +1185,7 @@ function setP(){
     }
     document.getElementById("homeTeamName").textContent = teamNames["home"];
     document.getElementById("awayTeamName").textContent = teamNames["away"];
-    document.getElementById("period").textContent = capitalizeWords(
-      match["status"]["name"].split(" ")
-    ).join(" ");
+    document.getElementById("period").textContent = "Game " + match["p"];
     // Score Setting
     var result = match["result"];
     if (result["home"]) homeScore = result["home"];
@@ -1183,7 +1193,7 @@ function setP(){
     document.getElementById("setScore").textContent =
       homeScore + " - " + awayScore;
     // Period Score Setting
-    let currentPeriod = 1;
+    currentPeriod = 0;
     if (match["periods"] != null) {
       if (match["periods"]["p1"]) {
         document.getElementById("homeScore1").textContent =
@@ -1191,8 +1201,8 @@ function setP(){
         document.getElementById("awayScore1").textContent =
           match["periods"]["p1"]["away"];
         gameCount =
-          match["periods"]["p1"]["home"] + match["periods"]["p1"]["away"] + 1;
-        currentPeriod = 2;
+          match["periods"]["p1"]["home"] + match["periods"]["p1"]["away"];
+        currentPeriod = 1;
         $("#score").text(match["periods"]["p1"]["home"] + '-' + match["periods"]["p1"]["away"])
       } else {
         document.getElementById("homeScore1").textContent = "-";
@@ -1204,49 +1214,52 @@ function setP(){
         document.getElementById("awayScore2").textContent =
           match["periods"]["p2"]["away"];
         gameCount =
-          match["periods"]["p2"]["home"] + match["periods"]["p2"]["away"] + 1;
+          match["periods"]["p2"]["home"] + match["periods"]["p2"]["away"];
         $("#score").text(match["periods"]["p2"]["home"] + '-' + match["periods"]["p2"]["away"])
+        currentPeriod = 2;
       } else {
         document.getElementById("homeScore2").textContent = "-";
         document.getElementById("awayScore2").textContent = "-";
       }
       if (match["periods"]["p3"]) {
+        currentPeriod = 3;
         document.getElementById("homeScore3").textContent =
           match["periods"]["p3"]["home"];
         document.getElementById("awayScore3").textContent =
           match["periods"]["p3"]["away"];
         gameCount =
-          match["periods"]["p3"]["home"] + match["periods"]["p3"]["away"] + 1;
+          match["periods"]["p3"]["home"] + match["periods"]["p3"]["away"];
         $("#score").text(match["periods"]["p3"]["home"] + '-' + match["periods"]["p3"]["away"])
       } else {
         document.getElementById("homeScore3").textContent = "-";
         document.getElementById("awayScore3").textContent = "-";
       }
       if (match["periods"]["p4"]) {
+        currentPeriod = 4;
         document.getElementById("homeScore4").textContent =
           match["periods"]["p4"]["home"];
         document.getElementById("awayScore4").textContent =
           match["periods"]["p4"]["away"];
         gameCount =
-          match["periods"]["p4"]["home"] + match["periods"]["p4"]["away"] + 1;
+          match["periods"]["p4"]["home"] + match["periods"]["p4"]["away"];
         $("#score").text(match["periods"]["p4"]["home"] + '-' + match["periods"]["p4"]["away"])
       } else {
         document.getElementById("homeScore4").textContent = "-";
         document.getElementById("awayScore4").textContent = "-";
       }
       if (match["periods"]["p5"]) {
+        currentPeriod = 5;
         document.getElementById("homeScore5").textContent =
           match["periods"]["p5"]["home"];
         document.getElementById("awayScore5").textContent =
           match["periods"]["p5"]["away"];
         gameCount =
-          match["periods"]["p5"]["home"] + match["periods"]["p5"]["away"] + 1;
+          match["periods"]["p5"]["home"] + match["periods"]["p5"]["away"];
         $("#score").text(match["periods"]["p5"]["home"] + '-' + match["periods"]["p5"]["away"])
       } else {
         document.getElementById("homeScore5").textContent = "-";
         document.getElementById("awayScore5").textContent = "-";
       }
-      // document.getElementById("gameCount").textContent = "Game " + gameCount;
     } else {
       document.getElementById("homeScore1").textContent = "-";
       document.getElementById("awayScore1").textContent = "-";
@@ -1264,14 +1277,15 @@ function setP(){
       document.getElementById("homeScore3").style.display = "block";
       document.getElementById("awayScore3").style.display = "block";
 
-      document.getElementById("tableName1").textContent = "1st Set";
-      document.getElementById("tableName2").textContent = "2nd Set";
-      document.getElementById("tableName3").textContent = "3rd Set";
+      document.getElementById("tableName1").textContent = "Game 1";
+      document.getElementById("tableName2").textContent = "Game 2";
+      document.getElementById("tableName3").textContent = "Game 3";
       document.getElementById("tableName3").style.display = "block";
     }
 
     if (match["status"]["name"] == "Ended") {
       //Match End
+      $("#period").text("Ended");
       setCenterFrame("Match End", homeScore + " : " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
@@ -1284,6 +1298,7 @@ function setP(){
     }
 
     if (match["status"]["name"] == "Not started") {
+      $("#period").text("Not Started");
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
       const currentDate = new Date();
@@ -1331,27 +1346,36 @@ function setP(){
     }
     if (match["p"] == 31) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 32) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Halftime", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 33) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
     if (match["p"] == 34) {
       setTimer = false;
+      $("#period").text("Break");
       setCenterFrame("Break", homeScore + " - " + awayScore);
       $("#homeStateG").css('display', 'none');
       $("#awayStateG").css('display', 'none');
     }
   
+}
+function whoserve() {
+  // ((homescore + awayscore) / 2 + gameperiod) % 2 == 1 home
+  // ((homescore + awayscore) / 2 + gameperiod) % 2 == 0 away
+  return (Math.floor((gameCount) / 2) + currentPeriod) % 2;
 }
